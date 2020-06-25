@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+  crossorigin="anonymous"></script>
+    <script>
+        var button = $('#button');
+        button.on('pointerup',function(event){
+        navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] })
+        .then(device => { device.gatt.connect() })
+        .then(server => {
+            return server.getPrimaryService('heart_rate');
+        })
+        .then(characteristic => {
+            return characteristic.readValues();
+        })
+        .then(value => {
+        console.log('Heart rate is ' + value.getUint32(0));
+        })
+        .catch(error => { console.log(error); });
+        })
+
+    </script>
+</head>
+<body>
+        <button id="button">
+        Enable Bluetooth
+        </button>
+</body>
+</html>

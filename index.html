@@ -9,7 +9,7 @@
   integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
   crossorigin="anonymous"></script>
     <script>
-        var button = $('#button');
+        var button = $('#button'), output = $('#output');
         button.on('pointerup',function(event){
         navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] })
         .then(device => { device.gatt.connect() })
@@ -21,8 +21,9 @@
         })
         .then(value => {
         console.log('Heart rate is ' + value.getUint32(0));
+        output.text(output.text()+'\n' + 'Heart rate is '+ value.getUint32(0));
         })
-        .catch(error => { console.log(error); });
+        .catch(error => { console.log(error); output.text(output.text()+'\n'+ error); });
         })
 
     </script>
@@ -31,5 +32,9 @@
         <button id="button">
         Enable Bluetooth
         </button>
+        <div>
+            <h1>Output</h1>
+            <textarea id="output" disabled="true"></textarea>
+        </div>
 </body>
 </html>
